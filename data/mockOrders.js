@@ -1,194 +1,101 @@
-export const mockOrders = {
-    // Scenario 1: NORMAL PROGRESSION - Currently "Shipped" (on-time)
-    normalOrder: {
-        id: "ORD-001",
-        status: "shipped",
-        estimatedDeliveryDate: "2026-09-27",
-        estimatedDeliveryTime: "2:00 PM - 6:00 PM",
-        isDelayed: false,
-        isNotReceived: false,
-        trackingAvailable: true,
-        trackingNumber: "1Z999AA10123456784",
-        product: {
-            name: "Wireless Headphones",
-            qty: 1,
-            price: 89.99,
-            image: "🎧"
-        },
-        timeline: [
-            {
-                status: "processing",
-                label: "Processing",
-                date: "Sep 24, 10:30 AM",
-                completed: true,
-                current: false
-            },
-            {
-                status: "shipped",
-                label: "Shipped",
-                date: "Sep 25, 2:45 PM",
-                completed: true,
-                current: true
-            },
-            {
-                status: "outForDelivery",
-                label: "Out for Delivery",
-                date: "Sep 27, TBD",
-                completed: false,
-                current: false
-            },
-            {
-                status: "delivered",
-                label: "Delivered",
-                date: "Sep 27, TBD",
-                completed: false,
-                current: false
-            }
-        ]
-    },
-
-    // Scenario 2: DELAYED ORDER - Estimated delivery has passed
-    delayedOrder: {
-        id: "ORD-002",
-        status: "shipped",
-        estimatedDeliveryDate: "2026-09-25", // Already passed
-        estimatedDeliveryTime: "by end of day",
-        isDelayed: true,
-        isNotReceived: false,
-        trackingAvailable: true,
-        trackingNumber: "1Z999BB20234567895",
-        delayReason: "Unexpected weather delay affecting carrier operations",
-        revisedEstimate: "2026-09-29",
-        product: {
-            name: "USB-C Cable (2-pack)",
-            qty: 2,
-            price: 19.99,
-            image: "🔌"
-        },
-        timeline: [
-            {
-                status: "processing",
-                label: "Processing",
-                date: "Sep 23, 9:15 AM",
-                completed: true,
-                current: false
-            },
-            {
-                status: "shipped",
-                label: "Shipped",
-                date: "Sep 24, 4:20 PM",
-                completed: true,
-                current: true
-            },
-            {
-                status: "outForDelivery",
-                label: "Out for Delivery",
-                date: "Sep 29, TBD",
-                completed: false,
-                current: false
-            },
-            {
-                status: "delivered",
-                label: "Delivered",
-                date: "Sep 29, TBD",
-                completed: false,
-                current: false
-            }
-        ]
-    },
-
-    // Scenario 3: DELIVERED BUT NOT RECEIVED - Says delivered, customer reports missing
-    deliveredNotReceived: {
-        id: "ORD-003",
-        status: "delivered",
-        estimatedDeliveryDate: "2026-09-26",
-        isDelayed: false,
-        isNotReceived: true,
-        trackingAvailable: true,
-        trackingNumber: "1Z999CC30345678906",
-        completedAt: "2026-09-26 3:45 PM",
-        product: {
-            name: "Smartphone Case",
-            qty: 1,
-            price: 24.99,
-            image: "📱"
-        },
-        timeline: [
-            {
-                status: "processing",
-                label: "Processing",
-                date: "Sep 24, 11:20 AM",
-                completed: true,
-                current: false
-            },
-            {
-                status: "shipped",
-                label: "Shipped",
-                date: "Sep 25, 1:30 PM",
-                completed: true,
-                current: false
-            },
-            {
-                status: "outForDelivery",
-                label: "Out for Delivery",
-                date: "Sep 26, 8:15 AM",
-                completed: true,
-                current: false
-            },
-            {
-                status: "delivered",
-                label: "Delivered",
-                date: "Sep 26, 3:45 PM",
-                completed: true,
-                current: true
-            }
-        ]
-    },
-
-    // Scenario 4: TRACKING NOT AVAILABLE YET - Order just placed
-    trackingNotAvailable: {
-        id: "ORD-004",
-        status: "processing",
-        estimatedDeliveryDate: null,
-        isDelayed: false,
-        isNotReceived: false,
-        trackingAvailable: false,
-        message: "Your order is being prepared. Tracking information will be available within 2-4 hours.",
-        product: {
-            name: "Phone Case",
-            qty: 1,
-            price: 24.99,
-            image: "📱"
-        },
-        timeline: [
-            {
-                status: "processing",
-                label: "Processing",
-                date: "Just now",
-                completed: true,
-                current: true
-            },
-            {
-                status: "shipped",
-                label: "Shipped",
-                date: "Soon",
-                completed: false,
-                current: false
-            },
-            {
-                status: "outForDelivery",
-                label: "Out for Delivery",
-                date: "TBD",
-                completed: false,
-                current: false
-            },
-            {
-                status: "delivered",
-                label: "Delivered",
-                date: "TBD",
-                completed: false,
-                current: false
-            }
-        ]
-    }
+const timeline = {
+    onTime: [
+        { status: "processing", label: "Processing", date: "Sep 24, 10:30 AM", completed: true, current: false },
+        { status: "shipped", label: "Shipped", date: "Sep 25, 2:45 PM", completed: true, current: true },
+        { status: "outForDelivery", label: "Out for delivery", date: "Expected Sep 27", completed: false, current: false },
+        { status: "delivered", label: "Delivered", date: "Expected Sep 27", completed: false, current: false },
+    ],
+    delayed: [
+        { status: "processing", label: "Processing", date: "Sep 24, 10:30 AM", completed: true, current: false },
+        { status: "shipped", label: "Shipped", date: "Sep 25, 2:45 PM", completed: true, current: true },
+        { status: "outForDelivery", label: "Out for delivery", date: "Rescheduled Sep 29", completed: false, current: false },
+        { status: "delivered", label: "Delivered", date: "Rescheduled Sep 29", completed: false, current: false },
+    ],
+    notReceived: [
+        { status: "processing", label: "Processing", date: "Sep 24, 10:30 AM", completed: true, current: false },
+        { status: "shipped", label: "Shipped", date: "Sep 25, 2:45 PM", completed: true, current: false },
+        { status: "outForDelivery", label: "Out for delivery", date: "Sep 27, 8:15 AM", completed: true, current: false },
+        { status: "delivered", label: "Delivered", date: "Sep 27, 3:45 PM", completed: true, current: true },
+    ],
+    noTracking: [
+        { status: "processing", label: "Processing", date: "Just now", completed: true, current: true },
+        { status: "shipped", label: "Shipped", date: "Usually within 1 day", completed: false, current: false },
+        { status: "outForDelivery", label: "Out for delivery", date: "Coming soon", completed: false, current: false },
+        { status: "delivered", label: "Delivered", date: "Coming soon", completed: false, current: false },
+    ],
 };
+
+// One order with four demo states. Keeping the order identity consistent makes it
+// clear that the selector is demonstrating UI states, not switching orders.
+export const mockOrder = {
+    id: "ORD-001",
+    product: {
+        name: "Wireless Headphones",
+        qty: 1,
+        price: 89.99,
+        image: "🎧",
+    },
+    scenarios: {
+        onTime: {
+            label: "On-time delivery",
+            status: "shipped",
+            statusLabel: "On the way",
+            statusDescription: "Your order is moving through the network.",
+            estimatedDeliveryDate: "Sep 27, 2026",
+            estimatedDeliveryTime: "2:00 PM – 6:00 PM",
+            isDelayed: false,
+            isNotReceived: false,
+            trackingAvailable: true,
+            trackingNumber: "1Z999AA10123456784",
+            timeline: timeline.onTime,
+        },
+        delayed: {
+            label: "Delayed order",
+            status: "shipped",
+            statusLabel: "Delivery delayed",
+            statusDescription: "We’re sorry — your package needs a little more time.",
+            estimatedDeliveryDate: "Sep 25, 2026",
+            estimatedDeliveryTime: "Original estimate passed",
+            isDelayed: true,
+            isNotReceived: false,
+            trackingAvailable: true,
+            trackingNumber: "1Z999AA10123456784",
+            delayReason: "Unexpected weather has slowed carrier operations.",
+            revisedEstimate: "Sep 29, 2026",
+            revisedEstimateTime: "By end of day",
+            timeline: timeline.delayed,
+        },
+        notReceived: {
+            label: "Delivered but not received",
+            status: "delivered",
+            statusLabel: "Marked as delivered",
+            statusDescription: "The carrier marked this package as delivered.",
+            estimatedDeliveryDate: "Sep 27, 2026",
+            estimatedDeliveryTime: "Delivered at 3:45 PM",
+            isDelayed: false,
+            isNotReceived: true,
+            trackingAvailable: true,
+            trackingNumber: "1Z999AA10123456784",
+            completedAt: "Sep 27, 2026 at 3:45 PM",
+            timeline: timeline.notReceived,
+        },
+        noTracking: {
+            label: "Tracking not available yet",
+            status: "processing",
+            statusLabel: "Preparing your order",
+            statusDescription: "Your order is confirmed and getting ready to ship.",
+            estimatedDeliveryDate: null,
+            estimatedDeliveryTime: null,
+            isDelayed: false,
+            isNotReceived: false,
+            trackingAvailable: false,
+            message: "Tracking usually becomes available within 2–4 hours after your order is packed.",
+            timeline: timeline.noTracking,
+        },
+    },
+};
+
+export const scenarioOptions = Object.entries(mockOrder.scenarios).map(([value, scenario]) => ({
+    value,
+    label: scenario.label,
+}));

@@ -1,40 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Order Tracking Screen
 
-## Getting Started
+A polished, mobile-first order tracking experience for an e-commerce application. The screen makes delivery progress easy to understand through a visual timeline, clear status messaging, delivery details, product summary, and contextual support actions.
 
-First, run the development server:
+Repository: [github.com/Mushfiq-Srijon/order_tracking_screen](https://github.com/Mushfiq-Srijon/order_tracking_screen)
+
+## What is included
+
+- Responsive layout for approximately 360px–430px mobile widths
+- Visual delivery timeline for Processing, Shipped, Out for delivery, and Delivered
+- Current order status with estimated delivery date and time
+- Product and order summary cards
+- Tracking number copy interaction
+- Expandable order details
+- Contact support feedback interaction
+- Delivery issue reporting form
+- Loading, empty, and error state components
+- Light/dark mode toggle with a persisted user preference
+- Accessible labels, keyboard-friendly controls, and readable status contrast
+
+## Demo scenarios
+
+The app uses one consistent mock order and changes its presentation through the `Demo scenario` dropdown. This keeps the experience consistent while making the required states easy to review:
+
+1. On-time delivery
+2. Delayed order
+3. Delivered but not received
+4. Tracking not available yet
+
+The scenario data lives in [`data/mockOrders.js`](./data/mockOrders.js). No backend or API integration is required.
+
+## Tech stack
+
+- Next.js 16 using the Pages Router
+- React 19
+- CSS with Tailwind CSS v4 support through PostCSS
+- Static/mock data only
+
+## Requirements
+
+- Node.js 20.9.0 or newer
+- npm 10 or newer recommended
+
+You can check your installed versions with:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+node --version
+npm --version
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Run locally
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+1. Clone the repository:
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+   ```bash
+   git clone https://github.com/Mushfiq-Srijon/order_tracking_screen.git
+   cd order_tracking_screen
+   ```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+2. Install dependencies:
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   npm install
+   ```
 
-## Learn More
+3. Start the development server:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm run dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+4. Open the app in a browser:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   - [http://localhost:3000](http://localhost:3000)
+   - [http://localhost:3000/order-tracking](http://localhost:3000/order-tracking)
 
-## Deploy on Vercel
+The root route and `/order-tracking` both open the order tracking screen. Changes to the source files are reflected automatically during development.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Available scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the local development server |
+| `npm run lint` | Run ESLint checks |
+| `npm run build` | Create an optimized production build |
+| `npm run start` | Start the production build locally |
+
+To test the production build:
+
+```bash
+npm run build
+npm run start
+```
+
+Then open [http://localhost:3000](http://localhost:3000).
+
+## Project structure
+
+```text
+components/OrderTracking/
+├── EmptyState.js
+├── ErrorState.js
+├── Icons.js
+├── LoadingState.js
+├── OrderInfoCard.js
+├── OrderTracking.js
+├── ProductSummary.js
+├── StatusAlert.js
+├── SupportActions.js
+└── TimelineStatus.js
+
+data/mockOrders.js       # Single mock order and its four demo states
+pages/index.js            # Root route
+pages/order-tracking.js   # Demo scenario selector page
+styles/globals.css        # Global layout, responsive styling, and themes
+```
+
+## Notes for assessment review
+
+- The delayed state shows the original estimate, reason for delay, revised estimate, and an appropriate next step.
+- The delivered-but-not-received state explains what happened and provides a missing-package action.
+- The no-tracking state explains why tracking is unavailable and what the customer should expect next.
+- Support actions are intentionally UI-only. They display local confirmation feedback and do not send data to a backend.
+- The theme preference is stored in `localStorage` under `order-tracking-theme`.

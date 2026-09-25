@@ -1,16 +1,4 @@
-/**
- * OrderTracking Component (Main)
- * 
- * Orchestrates all order tracking sub-components and manages:
- * - Loading/error/empty states
- * - Data fetching simulation
- * - Action handlers for support and issue reporting
- * 
- * Props:
- *   - orderId: The order ID to load (optional)
- */
-
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import StatusAlert from "./StatusAlert";
 import TimelineStatus from "./TimelineStatus";
 import OrderInfoCard from "./OrderInfoCard";
@@ -19,178 +7,122 @@ import SupportActions from "./SupportActions";
 import LoadingState from "./LoadingState";
 import ErrorState from "./ErrorState";
 import EmptyState from "./EmptyState";
+import Icon from "./Icons";
+
+const defaultOrder = {
+    id: "ORD-001",
+    status: "shipped",
+    statusLabel: "On the way",
+    statusDescription: "Your order is moving through the network.",
+    estimatedDeliveryDate: "Sep 27, 2026",
+    estimatedDeliveryTime: "2:00 PM – 6:00 PM",
+    isDelayed: false,
+    isNotReceived: false,
+    trackingAvailable: true,
+    trackingNumber: "1Z999AA10123456784",
+    product: { name: "Wireless Headphones", qty: 1, price: 89.99, image: "🎧" },
+    timeline: [],
+};
 
 export default function OrderTracking({ orderId = null, mockData = null }) {
-    // State management
-    const [order, setOrder] = useState(null);
-    const [pageState, setPageState] = useState("loading"); // "loading", "loaded", "error", "empty"
-    const [error, setError] = useState(null);
+    const [pageState, setPageState] = useState("loaded");
+    const [notice, setNotice] = useState("");
+    const [theme, setTheme] = useState(() => {
+        if (typeof window === "undefined") return "light";
+        return window.localStorage.getItem("order-tracking-theme") || "light";
+    });
+    // Static demo data is applied immediately so switching the selector feels like
+    // a real product control. LoadingState remains available for a real API.
+    const order = mockData || { ...defaultOrder, id: orderId || defaultOrder.id };
 
-    /**
- * Simulate fetching order data
- * In a real app, this would call an API
- * For testing, accepts mockData prop
- */
     useEffect(() => {
-        const fetchOrder = async () => {
-            try {
-                setPageState("loading");
-                setError(null);
+        document.documentElement.dataset.theme = theme;
+        window.localStorage.setItem("order-tracking-theme", theme);
+    }, [theme]);
 
-                // Simulate network delay
-                await new Promise((resolve) => setTimeout(resolve, 1000));
+    const toggleTheme = () => setTheme((currentTheme) => currentTheme === "light" ? "dark" : "light");
 
-                // Use provided mock data, or default mock order
-                const fetchedOrder = mockData || {
-                    id: orderId || "ORD-001",
-                    status: "shipped",
-                    estimatedDeliveryDate: "2026-09-27",
-                    estimatedDeliveryTime: "2:00 PM - 6:00 PM",
-                    isDelayed: false,
-                    isNotReceived: false,
-                    trackingAvailable: true,
-                    trackingNumber: "1Z999AA10123456784",
-                    product: {
-                        name: "Wireless Headphones",
-                        qty: 1,
-                        price: 89.99,
-                        image: "🎧"
-                    },
-                    timeline: [
-                        {
-                            status: "processing",
-                            label: "Processing",
-                            date: "Sep 24, 10:30 AM",
-                            completed: true,
-                            current: false
-                        },
-                        {
-                            status: "shipped",
-                            label: "Shipped",
-                            date: "Sep 25, 2:45 PM",
-                            completed: true,
-                            current: true
-                        },
-                        {
-                            status: "outForDelivery",
-                            label: "Out for Delivery",
-                            date: "Sep 27, TBD",
-                            completed: false,
-                            current: false
-                        },
-                        {
-                            status: "delivered",
-                            label: "Delivered",
-                            date: "Sep 27, TBD",
-                            completed: false,
-                            current: false
-                        }
-                    ]
-                };
-
-                if (fetchedOrder) {
-                    setOrder(fetchedOrder);
-                    setPageState("loaded");
-                } else {
-                    setPageState("empty");
-                }
-            } catch (err) {
-                setError(err.message || "Failed to load order. Please try again.");
-                setPageState("error");
-            }
-        };
-
-        fetchOrder();
-    }, [orderId, mockData]);
-
-    /**
-     * Handle retry when error occurs
-     */
     const handleRetry = () => {
         setPageState("loading");
-        setError(null);
-        // Re-trigger the effect by changing a dependency
-        // In real app, would retry the API call
-        setTimeout(() => {
-            setPageState("loaded");
-        }, 1000);
+        window.setTimeout(() => setPageState("loaded"), 550);
     };
 
-    /**
-     * Handle contact support action
-     * In real app, would open chat, modal, or navigate to support page
-     */
     const handleContactSupport = () => {
-        console.log("Contact support for order:", order.id);
-        // Example implementations:
-        // - window.open('/support/chat');
-        // - openModal(SupportChatModal);
-        // - analytics.track('support_contact', { orderId: order.id });
-        alert(
-            `Support chat opened for order ${order.id}. In production, this would open a live chat or contact form.`
-        );
+        setNotice("Support is ready to help. A chat request has been started for this order.");
     };
 
-    /**
-     * Handle report issue action
-     * In real app, would submit issue to backend
-     */
-    const handleReportIssue = (message) => {
-        console.log("Issue reported for order:", order.id, message);
-        // Example implementations:
-        // - await fetch(`/api/orders/${order.id}/report-issue`, { method: 'POST', body: JSON.stringify({ message }) });
-        // - analytics.track('issue_reported', { orderId: order.id, issue: message });
-        alert(
-            `Thank you for reporting this issue. Our support team will contact you within 24 hours about order ${order.id}.`
-        );
+    const handleReportIssue = () => {
+        setNotice("Thanks — your delivery issue was submitted. Support will follow up within 24 hours.");
     };
 
-    // Render different states
-    if (pageState === "loading") {
-        return <LoadingState />;
-    }
+    if (pageState === "loading") return <LoadingState />;
+    if (pageState === "error") return <ErrorState onRetry={handleRetry} />;
+    if (pageState === "empty" || !order) return <EmptyState />;
 
-    if (pageState === "error") {
-        return <ErrorState error={error} onRetry={handleRetry} />;
-    }
-
-    if (pageState === "empty" || !order) {
-        return <EmptyState />;
-    }
-
-    // Render loaded order tracking screen
     return (
-        <div className="bg-gray-50 pb-8">
-            {/* Header */}
-            <div className="border-b border-gray-200 bg-white px-4 py-4 sticky top-0 z-10">
-                <h1 className="text-xl font-bold text-black">Track Your Order</h1>
-                <p className="mt-1 text-sm text-gray-600">Order #{order.id}</p>
-            </div>
-
-            {/* Main content */}
-            <div className="mx-auto max-w-md">
-                {/* StatusAlert - appears for delayed/not received */}
-                <StatusAlert order={order} />
-
-                {/* Card wrapper for timeline and info */}
-                <div className="mt-4 overflow-hidden rounded-lg border border-gray-200 bg-white">
-                    {/* Timeline Component */}
-                    <TimelineStatus timeline={order.timeline} isDelayed={order.isDelayed} />
+        <div className="order-tracking">
+            <header className="tracking-header">
+                <button className="icon-button" type="button" aria-label="Go back">
+                    <Icon name="arrowLeft" size={21} />
+                </button>
+                <div className="tracking-header__copy">
+                    <p className="eyebrow">Order tracking</p>
+                    <h1>Where&apos;s my order?</h1>
                 </div>
+                <div className="tracking-header__actions">
+                    <span className="order-id">#{order.id}</span>
+                    <button
+                        className="theme-toggle"
+                        type="button"
+                        onClick={toggleTheme}
+                        aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+                        title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+                    >
+                        <Icon name={theme === "light" ? "moon" : "sun"} size={17} />
+                    </button>
+                </div>
+            </header>
 
-                {/* Order Info Card - delivery date, order #, tracking # */}
-                <OrderInfoCard order={order} />
+            <section className={`status-hero ${order.isDelayed ? "status-hero--delayed" : order.isNotReceived ? "status-hero--issue" : ""}`}>
+                <div className="status-hero__topline">
+                    <span className="status-badge">
+                        <span className="status-badge__dot" />
+                        {order.statusLabel}
+                    </span>
+                    <span className="status-step">{order.status === "delivered" ? "4 of 4" : order.status === "processing" ? "1 of 4" : "2 of 4"}</span>
+                </div>
+                <h2>{order.statusLabel}</h2>
+                <p>{order.statusDescription}</p>
+            </section>
 
-                {/* Product Summary - what was ordered */}
-                <ProductSummary product={order.product} />
+            <StatusAlert order={order} onReportIssue={handleReportIssue} />
 
-                {/* Support Actions - contact support or report issue */}
-                <SupportActions
-                    order={order}
-                    onContactSupport={handleContactSupport}
-                    onReportIssue={handleReportIssue}
-                />
-            </div>
+            <section className="surface-card timeline-card" aria-labelledby="progress-heading">
+                <div className="section-heading">
+                    <div>
+                        <p className="eyebrow">Delivery progress</p>
+                        <h2 id="progress-heading">Your package journey</h2>
+                    </div>
+                    <Icon name="truck" size={22} />
+                </div>
+                <TimelineStatus timeline={order.timeline} isDelayed={order.isDelayed} />
+            </section>
+
+            <OrderInfoCard order={order} />
+            <ProductSummary product={order.product} />
+            <SupportActions
+                order={order}
+                onContactSupport={handleContactSupport}
+                onReportIssue={handleReportIssue}
+            />
+
+            {notice && (
+                <div className="toast" role="status">
+                    <span className="toast__icon"><Icon name="check" size={17} /></span>
+                    <span>{notice}</span>
+                    <button type="button" onClick={() => setNotice("")} aria-label="Dismiss notification">×</button>
+                </div>
+            )}
         </div>
     );
 }
