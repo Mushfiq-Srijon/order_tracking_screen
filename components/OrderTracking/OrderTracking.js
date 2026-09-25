@@ -24,8 +24,8 @@ const defaultOrder = {
     timeline: [],
 };
 
-export default function OrderTracking({ orderId = null, mockData = null }) {
-    const [pageState, setPageState] = useState("loaded");
+export default function OrderTracking({ orderId = null, mockData = null, initialPageState = "loaded" }) {
+    const [pageState, setPageState] = useState(initialPageState);
     const [notice, setNotice] = useState("");
     const [theme, setTheme] = useState(() => {
         if (typeof window === "undefined") return "light";

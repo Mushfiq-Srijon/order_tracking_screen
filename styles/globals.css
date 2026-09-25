@@ -41,12 +41,20 @@ button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3p
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .tracking-page { min-height: 100vh; padding: 26px 16px 48px; }
 .tracking-shell { width: 100%; max-width: 500px; margin: 0 auto; }
-.demo-control { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 11px 13px 11px 16px; margin-bottom: 13px; border: 1px solid #dfe6ef; border-radius: 14px; background: rgba(255,255,255,.78); box-shadow: 0 4px 16px rgba(28, 43, 69, .03); }
+.demo-control { display: flex; align-items: stretch; flex-direction: column; gap: 9px; padding: 11px 13px 11px 16px; margin-bottom: 13px; border: 1px solid #dfe6ef; border-radius: 14px; background: rgba(255,255,255,.78); box-shadow: 0 4px 16px rgba(28, 43, 69, .03); }
+.demo-control__copy { min-width: 0; }
 .demo-control__hint { margin: 3px 0 0; color: var(--muted); font-size: 11px; }
+.demo-control__controls { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; }
 .eyebrow { margin: 0; color: #8591a2; font-size: 10px; font-weight: 700; letter-spacing: .12em; line-height: 1.3; text-transform: uppercase; }
-.select-wrap { position: relative; flex: 0 1 220px; }
+.select-wrap { position: relative; flex: 1 1 auto; max-width: 220px; }
 .select-wrap::after { position: absolute; top: 50%; right: 11px; content: "⌄"; color: #69778d; font-size: 16px; pointer-events: none; transform: translateY(-55%); }
 .select-wrap select { width: 100%; appearance: none; border: 1px solid #d9e1eb; border-radius: 9px; padding: 9px 28px 9px 11px; background: white; color: var(--ink); font-size: 12px; font-weight: 700; }
+.state-preview-buttons { display: flex; gap: 6px; }
+.state-preview-button { display: inline-flex; align-items: center; gap: 5px; min-height: 35px; border: 1px solid #d9e1eb; border-radius: 9px; padding: 7px 9px; background: #fff; color: #647287; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.state-preview-button:hover, .state-preview-button--active { border-color: #c8d3e5; background: #f7f9fc; color: var(--ink); }
+.state-preview-button__dot { width: 6px; height: 6px; border-radius: 50%; }
+.state-preview-button__dot--loading { background: #8d99aa; }
+.state-preview-button__dot--error { background: var(--red); }
 
 .order-tracking { position: relative; }
 .tracking-header { display: flex; align-items: center; gap: 12px; padding: 14px 0 18px; }
@@ -200,6 +208,8 @@ button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3p
 [data-theme="dark"] .demo-control { border-color: var(--line); background: rgba(23,31,44,.84); }
 [data-theme="dark"] .select-wrap select { border-color: var(--line); background: var(--card); color: var(--ink); }
 [data-theme="dark"] .select-wrap::after { color: #aebbd0; }
+[data-theme="dark"] .state-preview-button { border-color: var(--line); background: var(--card); color: #aab6c7; }
+[data-theme="dark"] .state-preview-button:hover, [data-theme="dark"] .state-preview-button--active { background: #202a39; color: var(--ink); }
 [data-theme="dark"] .icon-button { background: var(--card); color: #b8c4d5; }
 [data-theme="dark"] .theme-toggle { border-color: #f6b74b; background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); color: #1a1c20; box-shadow: 0 8px 18px rgba(245, 158, 11, 0.28); }
 [data-theme="dark"] .order-id { color: #9aa8bb; }
@@ -249,8 +259,10 @@ button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3p
 }
 @media (max-width: 370px) {
   .tracking-page { padding: 16px 12px 36px; }
-  .demo-control { align-items: flex-start; flex-direction: column; gap: 9px; }
-  .select-wrap { width: 100%; flex-basis: auto; }
+  .demo-control__controls { align-items: stretch; flex-direction: column; }
+  .select-wrap { width: 100%; max-width: none; flex-basis: auto; }
+  .state-preview-buttons { width: 100%; }
+  .state-preview-button { flex: 1; justify-content: center; }
   .status-hero h2 { font-size: 23px; }
   .support-actions { grid-template-columns: 1fr; }
   .tracking-header h1 { font-size: 19px; }
