@@ -1,0 +1,218 @@
+************************************************************ CLAUDE ***************************************************************
+Shared link: https://claude.ai/share/ce71c8c4-8337-4298-a760-fd75976cd4aa
+
+
+Prompt 1:
+
+I’m working on a frontend practical assessment. There are 4 tasks.
+I’m going to work on Task 1 first. I want you to act like a practical frontend development partner throughout this task. Help me plan the UI, choose a sensible component structure, implement it, debug problems, and review the final result. Don’t overcomplicate things or introduce any backend functionality.
+TASK 1 — ORDER TRACKING SCREEN
+I need to design and implement a modern, professional mobile Order Tracking screen for an e-commerce application.
+The existing application only shows these four statuses:
+
+* Processing
+* Shipped
+* Out for Delivery
+* Delivered
+
+Users currently find the status difficult to understand, so the new design should make the delivery progress immediately understandable.
+The screen needs to include:
+
+* A clear visual delivery progress/timeline
+* The current order status
+* Estimated delivery date/time
+* Order/product summary
+* A clear way to contact support
+* Appropriate loading, empty, and error states where relevant
+* Responsive design for approximately 360px–430px mobile widths
+* Clean spacing, typography, hierarchy, and overall visual consistency
+* Meaningful interactions such as viewing order details, contacting support, or reporting a delivery issue
+
+There are three important situations that the UI MUST support:
+
+1. DELAYED ORDER
+The estimated delivery time has already passed or the order is significantly delayed.
+The UI should clearly communicate that the order is delayed and provide an appropriate next step for the customer.
+2. DELIVERED BUT NOT RECEIVED
+The system says the order was delivered, but the customer reports that they did not receive it.
+The UI should provide an appropriate support action or next step for resolving/reporting the issue.
+3. TRACKING NOT AVAILABLE YET
+The order exists, but tracking information is not available yet.
+The UI should not look broken or empty. It should clearly explain the situation and give the customer useful information about what happens next.
+
+The same overall product experience should adapt naturally to all three situations rather than looking like three completely unrelated pages.
+TECHNICAL CONSTRAINTS
+The technical requirements are flexible. I'll be using next.js and basic css (separate css files) for this assessment. Any reasonable UI/icon library is allowed.
+Backend integration is NOT required. Mock/static data is acceptable.
+I want the final result to feel like a polished real-world e-commerce product rather than a basic assessment mockup.
+For the visual design, prioritize:
+
+* Strong information hierarchy
+* Excellent mobile-first layout
+* Clear status communication
+* A visually understandable timeline
+* Good use of status indicators/badges
+* Professional typography
+* Consistent spacing
+* Appropriate empty/error/loading states
+* Subtle interactions where they add value
+* Accessibility and readable contrast
+* Responsive behavior around 360px, 390px, and 430px widths
+
+Before writing a large amount of code, first help me break the task down into:
+
+1. The screen structure
+2. The components we should create
+3. The data/state model needed for the three required situations
+4. The interactions
+5. The visual/design direction
+6. The implementation plan
+
+Then we can implement it step by step.
+Please don't generate a giant unexplained code dump. I want the implementation to be clean and understandable.
+If you suggest a library, component, or design pattern, briefly explain why we're using it.
+
+
+
+
+prompt 2:
+
+Ok I like the implementation plan you suggested. Let's start working according to that. I have read the color palette, typography and all. I want you to follow those and show me what it looks like. I'll decide if I need any edits or changes. 
+Let's start following the plan. Remember- no backends, separate css files and readable, well commented codes. Don't dump a lot of code at once, Go step by step.
+
+
+prompt 3:
+
+ok it's working. though i would like to change the icons, i have my preferred icons from font awesome. let's build the whole thing firtst then we'll change icons.
+
+
+prompt 4:
+
+Ok so far looks good. Go ahead
+
+
+prompt 5:
+
+Working. Also the track number is copying
+
+
+prompt 6:
+
+Perfect. Go ahead
+
+
+prompt 7:
+
+Ok working fine
+
+
+prompt 8:
+
+working
+
+
+prompt 9:
+
+working. go on. i have things to change in mind but you finish it first
+
+
+
+
+************************************************************** CODEX *************************************************************
+Shared link: https://chatgpt.com/s/cx_6ab6d0d6bacc8191b23dd0a874ab54d5
+
+
+
+prompt 1:
+
+I’m working on a frontend practical assessment. There are 4 tasks.\
+I’m going to work on Task 1 first. I want you to act like a practical frontend development partner throughout this task. Help me plan the UI, choose a sensible component structure, implement it, debug problems, and review the final result. Don’t overcomplicate things or introduce any backend functionality.\
+TASK 1 — ORDER TRACKING SCREEN\
+I need to design and implement a modern, professional mobile Order Tracking screen for an e-commerce application.\
+The existing application only shows these four statuses:
+
+- Processing
+- Shipped
+- Out for Delivery
+- Delivered
+
+Users currently find the status difficult to understand, so the new design should make the delivery progress immediately understandable.\
+The screen needs to include:
+
+- A clear visual delivery progress/timeline
+- The current order status
+- Estimated delivery date/time
+- Order/product summary
+- A clear way to contact support
+- Appropriate loading, empty, and error states where relevant
+- Responsive design for approximately 360px–430px mobile widths
+- Clean spacing, typography, hierarchy, and overall visual consistency
+- Meaningful interactions such as viewing order details, contacting support, or reporting a delivery issue
+
+There are three important situations that the UI MUST support:
+
+1. DELAYED ORDER The estimated delivery time has already passed or the order is significantly delayed. The UI should clearly communicate that the order is delayed and provide an appropriate next step for the customer.
+2. DELIVERED BUT NOT RECEIVED The system says the order was delivered, but the customer reports that they did not receive it. The UI should provide an appropriate support action or next step for resolving/reporting the issue.
+3. TRACKING NOT AVAILABLE YET The order exists, but tracking information is not available yet. The UI should not look broken or empty. It should clearly explain the situation and give the customer useful information about what happens next.
+
+The same overall product experience should adapt naturally to all three situations rather than looking like three completely unrelated pages.\
+TECHNICAL CONSTRAINTS\
+The technical requirements are flexible. I'll be using next.js and basic css (separate css files) for this assessment. Any reasonable UI/icon library is allowed.\
+Backend integration is NOT required. Mock/static data is acceptable.\
+I want the final result to feel like a polished real-world e-commerce product rather than a basic assessment mockup.\
+For the visual design, prioritize:
+
+- Strong information hierarchy
+- Excellent mobile-first layout
+- Clear status communication
+- A visually understandable timeline
+- Good use of status indicators/badges
+- Professional typography
+- Consistent spacing
+- Appropriate empty/error/loading states
+- Subtle interactions where they add value
+- Accessibility and readable contrast
+- Responsive behavior around 360px, 390px, and 430px widths
+
+
+below are the planned implementations:
+
+
+1. **Create the project structure** — Next.js pages, CSS folder, mock data
+2. **Build TimelineStatus component** — The visual centerpiece
+3. **Build StatusAlert component** — For delayed/not-received flags
+4. **Build OrderInfoCard** — Delivery date, order numbers, tracking
+5. **Build ProductSummary** — What was ordered
+6. **Build SupportActions** — Contact & report buttons
+7. **Build LoadingState & ErrorState** — Edge cases
+8. **Wire it together** — Main OrderTracking component with state switching
+9. **Test all three scenarios** — Swap mock data, verify UI adapts
+10. **Refine interactions** — Add copy-to-clipboard, tooltips, subtle polish
+
+only number 10 is left. I want you to polish the whole website according to the requirements.
+
+Also remove the top part saying this:
+
+**🧪 Test Order Tracking Scenarios**
+
+**✓ Normal Order⚠️ Delayed Order🚨 Not Received📦 No Tracking Yet**
+
+put a dropdown there like "Demo scenario: [dropdown]"
+
+the dropdown will contain the different states so that the judge can see all the states. there are 4 mock orders in the mock data. keep only 1 order with all the states.
+
+
+
+
+prompt 2:
+
+Ok.. I was going to provide you icons from font awesome but you already implemented good icons. Let's keep what we have. Implement a dark/light mode toggle just for user preference. a small icon at the corner will be enough. And remove the next.js icon from the ui
+
+
+prompt 3:
+
+I changed the button colour to make it visible. ok all good.
+
+now examine the project and it's requirement and edit the readme file including how someone should install and run the project locally.
+
+github repo: [https://github.com/Mushfiq-Srijon/order\_tracking\_screen](https://github.com/Mushfiq-Srijon/order_tracking_screen)
